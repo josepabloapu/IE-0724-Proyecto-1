@@ -49,7 +49,7 @@ void rbt::flip_colors(std::shared_ptr<rbt_node> node)
     
     node->color = !node->color;
     node->lc_node->color = !node->lc_node->color;
-    node->rc_node->color = !node->lc_node->color;
+    node->rc_node->color = !node->rc_node->color;
     
 }
 
