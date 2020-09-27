@@ -33,15 +33,43 @@ bool rbt::contains(float value)
 }
 
 std::shared_ptr<rbt_node> rbt::rotate_left(std::shared_ptr<rbt_node> node)
-{
-    // Add code
+{                                          // rbt_node *node =: node *x
+
+  std::shared_ptr<rbt_node> node_Aux( new rbt_node() );     //Se declara una variable puntero tipo nodo y se iguala a nodo vacio y se le reserva espacio
+
+    node_Aux->rc_node = node->rc_node->lc_node; //Si existe el hijo izquierdo, e guarda el hijo hizquierdo en el papà de la variable temporarl
+
+    node_Aux->lc_node = node->lc_node;                                //Se guarda al tio
+    node_Aux->value = node->value;                                   //Se guarda el dato
+    node_Aux->color = node->color;
+
+    node->value = node->rc_node->value;                               //Numero del papà va al numero del abuelo.
+    node->lc_node = node_Aux;                                       // Conectamos node_Aux al nuevo abuelo
+
+    node->rc_node = node->rc_node->rc_node;     //Si hijo derecho existe, pasa a ser el papà
+
     return node;
 }
 
+
 std::shared_ptr<rbt_node> rbt::rotate_right(std::shared_ptr<rbt_node> node)
 {
-    // Add code
-    return node;
+
+  std::shared_ptr<rbt_node> node_Aux2( new rbt_node() );
+
+    node_Aux2->lc_node = node->lc_node->rc_node;
+
+    node_Aux2->rc_node = node->rc_node;
+    node_Aux2->value = node->value;
+    node_Aux2->color = node->color;
+
+    node->value = node->left->value;
+    node->color = node->left->color;
+    node->rc_node = node_Aux2;
+
+    node->lc_node = node->lc_node->lc_node;
+
+    return node->lc_node;
 }
 
 void rbt::flip_colors(std::shared_ptr<rbt_node> node)
