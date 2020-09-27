@@ -45,9 +45,14 @@ std::shared_ptr<rbt_node> rbt::rotate_right(std::shared_ptr<rbt_node> node)
 }
 
 void rbt::flip_colors(std::shared_ptr<rbt_node> node)
-{
-    // Add code
+{   
+    
+    node->color = !node->color;
+    node->lc_node->color = !node->lc_node->color;
+    node->rc_node->color = !node->lc_node->color;
+    
 }
+
 
 std::shared_ptr<rbt_node> rbt::move_red_left(std::shared_ptr<rbt_node> node)
 {
@@ -80,6 +85,24 @@ std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> 
         node->rc_node = rbt_node_add_recursive(node->rc_node, new_node);
 
     // Add code
+    // caso 1
+    if (is_red(node->rc_node) && !is_red(node->lc_node))
+    {
+        node = rotate_left(node);
+    }
+
+    // caso 2
+    if (is_red(node->lc_node) && !is_red(node->lc_node->lc_node))
+    {
+        node = rotate_right(node);
+    }   
+
+    //caso 3
+    if (is_red(node->lc_node) && is_red(node->rc_node))
+    {
+        flip_colors(node);
+    }
+
     return node;
 }
 
@@ -133,12 +156,34 @@ int rbt::rbt_node_remove(std::shared_ptr<rbt_node> in_root,
     return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
 }
 
-int rbt::rbt_search(std::shared_ptr<rbt_node> in_root,
+int rbt::rbt_search(std::shared_ptr<rbt_node> node,
                     float num,
                     std::shared_ptr<rbt_node> found_node)
 {
-    // Add code
-    return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
+    //si el arbol esta vacio
+    if (node == nullptr)
+    {
+      return rbt_error_codes::RBT_NOT_FOUND;  
+    }
+
+    //si el nodo actual tiene el valor buscado
+    if (num == node->value)
+    {
+        found_node = node;
+        return rbt_error_codes::RBT_SUCCESS; 
+    }
+
+    //si el nodo actual tiene un valor mayor al buscado
+    if (num < root->value)
+    {
+       rbt_search(root->lc_node, num, found_node);
+    }
+    
+    if (num > root->value)
+    {
+        rbt_search(root->rc_node, num, found_node);
+    }
+
 }
 
 int rbt::rbt_max_get(std::shared_ptr<rbt_node> in_root,
