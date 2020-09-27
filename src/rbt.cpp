@@ -120,8 +120,7 @@ void rbt::rbt_print_recursive(std::shared_ptr<rbt_node> node) const
 /**
  * Interface Functions
  */
-int rbt::rbt_create(std::vector<float> in_number_list,
-                    std::shared_ptr<rbt_node> new_root_node)
+int rbt::rbt_create(std::vector<float> in_number_list)
 {
     for (auto iterator = in_number_list.begin();
          iterator != in_number_list.end();
@@ -129,28 +128,24 @@ int rbt::rbt_create(std::vector<float> in_number_list,
     {
         std::shared_ptr<rbt_node> new_node(
             new rbt_node(*iterator, rbt_color_codes::RBT_COLOR_RED));
-        int status = rbt_node_add(root, new_node, new_root_node);
+        int status = rbt_node_add(new_node);
         if (status != rbt_error_codes::RBT_SUCCESS)
             return status;
     }
     return rbt_error_codes::RBT_SUCCESS;
 }
 
-int rbt::rbt_node_add(std::shared_ptr<rbt_node> in_root,
-                      std::shared_ptr<rbt_node> new_node,
-                      std::shared_ptr<rbt_node> new_root)
+int rbt::rbt_node_add(std::shared_ptr<rbt_node> new_node)
 {
     if (std::isnan(new_node->value))
         return rbt_error_codes::RBT_INVALID_PARAM;
 
-    root = rbt_node_add_recursive(in_root, new_node);
+    root = rbt_node_add_recursive(root, new_node);
     root->color = rbt_color_codes::RBT_COLOR_BLACK;
     return rbt_error_codes::RBT_SUCCESS;
 }
 
-int rbt::rbt_node_remove(std::shared_ptr<rbt_node> in_root,
-                         std::shared_ptr<rbt_node> node_to_remove,
-                         std::shared_ptr<rbt_node> new_root)
+int rbt::rbt_node_remove(std::shared_ptr<rbt_node> node_to_remove)
 {
     // Add code
     return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
@@ -186,22 +181,22 @@ int rbt::rbt_search(std::shared_ptr<rbt_node> node,
 
 }
 
-int rbt::rbt_max_get(std::shared_ptr<rbt_node> in_root,
-                     std::shared_ptr<rbt_node> max_node)
+int rbt::rbt_max_get(std::shared_ptr<rbt_node> max_node)
 {
     //Add code
     return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
 }
 
-int rbt::rbt_min_get(std::shared_ptr<rbt_node> in_root,
-                     std::shared_ptr<rbt_node> min_node)
+int rbt::rbt_min_get(std::shared_ptr<rbt_node> min_node)
 {
     //Add code
     return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
 }
 
-int rbt::rbt_print(std::shared_ptr<rbt_node> in_root)
+int rbt::rbt_print()
 {
-    rbt_print_recursive(in_root);
+    rbt_print_recursive(root);
     return rbt_error_codes::RBT_SUCCESS;
 }
+
+
