@@ -33,54 +33,65 @@ bool rbt::contains(float value)
 }
 
 std::shared_ptr<rbt_node> rbt::rotate_left(std::shared_ptr<rbt_node> node)
-{                                          // rbt_node *node =: node *x
+{
+    // Se declara una variable puntero tipo nodo, se iguala a un nodo vacio y se le reserva espacio
+    std::shared_ptr<rbt_node> node_aux(new rbt_node());
 
-  std::shared_ptr<rbt_node> node_Aux( new rbt_node() );     //Se declara una variable puntero tipo nodo y se iguala a nodo vacio y se le reserva espacio
+    // Guarda el hijo izquierdo en el papá de la variable temporal
+    node_aux->rc_node = node->rc_node->lc_node;
 
-    node_Aux->rc_node = node->rc_node->lc_node; //Si existe el hijo izquierdo, e guarda el hijo hizquierdo en el papà de la variable temporarl
+    // Se guarda el tio
+    node_aux->lc_node = node->lc_node;
 
-    node_Aux->lc_node = node->lc_node;                                //Se guarda al tio
-    node_Aux->value = node->value;                                   //Se guarda el dato
-    node_Aux->color = node->color;
+    // Se guarda el dato
+    node_aux->value = node->value;
+    node_aux->color = rbt_color_codes::RBT_COLOR_RED;
 
-    node->value = node->rc_node->value;                               //Numero del papà va al numero del abuelo.
-    node->lc_node = node_Aux;                                       // Conectamos node_Aux al nuevo abuelo
+    // Número del papá va al numero del abuelo.
+    node->value = node->rc_node->value;
 
-    node->rc_node = node->rc_node->rc_node;     //Si hijo derecho existe, pasa a ser el papà
+    // Conectamos node_aux al nuevo abuelo
+    node->lc_node = node_aux;
+
+    // El hijo derecho pasa a ser el papá
+    node->rc_node = node->rc_node->rc_node;
 
     return node;
 }
 
-
 std::shared_ptr<rbt_node> rbt::rotate_right(std::shared_ptr<rbt_node> node)
 {
+    // Se declara una variable puntero tipo nodo, se iguala a un nodo vacio y se le reserva espacio
+    std::shared_ptr<rbt_node> node_aux(new rbt_node());
 
-  std::shared_ptr<rbt_node> node_Aux2( new rbt_node() );
+    // Guarda el hijo derecho en el papá de la variable temporal
+    node_aux->lc_node = node->lc_node->rc_node;
 
-    node_Aux2->lc_node = node->lc_node->rc_node;
+    // Se guarda el tio
+    node_aux->rc_node = node->rc_node;
 
-    node_Aux2->rc_node = node->rc_node;
-    node_Aux2->value = node->value;
-    node_Aux2->color = node->color;
+    // Se guarda el dato
+    node_aux->value = node->value;
+    node_aux->color = rbt_color_codes::RBT_COLOR_RED;
 
-    node->value = node->left->value;
-    node->color = node->left->color;
-    node->rc_node = node_Aux2;
+    // Número del papá va al numero del abuelo.
+    node->value = node->lc_node->value;
 
+    // Conectamos node_aux al nuevo abuelo
+    node->rc_node = node_aux;
+
+    // El hijo izquierdo pasa a ser el papá
     node->lc_node = node->lc_node->lc_node;
 
-    return node->lc_node;
+    return node;
 }
 
 void rbt::flip_colors(std::shared_ptr<rbt_node> node)
-{   
-    
+{
     node->color = !node->color;
     node->lc_node->color = !node->lc_node->color;
     node->rc_node->color = !node->rc_node->color;
-    
 }
-
 
 std::shared_ptr<rbt_node> rbt::move_red_left(std::shared_ptr<rbt_node> node)
 {
@@ -112,24 +123,17 @@ std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> 
     if (new_node->value > node->value)
         node->rc_node = rbt_node_add_recursive(node->rc_node, new_node);
 
-    // Add code
     // caso 1
     if (is_red(node->rc_node) && !is_red(node->lc_node))
-    {
         node = rotate_left(node);
-    }
 
     // caso 2
-    if (is_red(node->lc_node) && !is_red(node->lc_node->lc_node))
-    {
+    if (is_red(node->lc_node) && is_red(node->lc_node->lc_node))
         node = rotate_right(node);
-    }   
 
-    //caso 3
+    // caso 3
     if (is_red(node->lc_node) && is_red(node->rc_node))
-    {
         flip_colors(node);
-    }
 
     return node;
 }
@@ -186,27 +190,26 @@ int rbt::rbt_search(std::shared_ptr<rbt_node> node,
     //si el arbol esta vacio
     if (node == nullptr)
     {
-      return rbt_error_codes::RBT_NOT_FOUND;  
+        return rbt_error_codes::RBT_NOT_FOUND;
     }
 
     //si el nodo actual tiene el valor buscado
     if (num == node->value)
     {
         found_node = node;
-        return rbt_error_codes::RBT_SUCCESS; 
+        return rbt_error_codes::RBT_SUCCESS;
     }
 
     //si el nodo actual tiene un valor mayor al buscado
     if (num < root->value)
     {
-       rbt_search(root->lc_node, num, found_node);
+        rbt_search(root->lc_node, num, found_node);
     }
-    
+
     if (num > root->value)
     {
         rbt_search(root->rc_node, num, found_node);
     }
-
 }
 
 int rbt::rbt_max_get(std::shared_ptr<rbt_node> max_node)
@@ -226,5 +229,3 @@ int rbt::rbt_print()
     rbt_print_recursive(root);
     return rbt_error_codes::RBT_SUCCESS;
 }
-
-
