@@ -28,7 +28,11 @@ bool rbt::is_red(std::shared_ptr<rbt_node> node)
 
 bool rbt::contains(float value)
 {
-    int status = rbt_search(root, value, nullptr);
+    rbt_node *my_node = new rbt_node();
+    int status = rbt_search(value, my_node);
+    delete my_node;
+    my_node = nullptr;
+
     return status == rbt_error_codes::RBT_SUCCESS;
 }
 
@@ -138,6 +142,26 @@ std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> 
     return node;
 }
 
+std::shared_ptr<rbt_node> rbt::rbt_node_search_recursive(std::shared_ptr<rbt_node> node,
+                                                         float num)
+{
+    //si el arbol esta vacio o llegó a una hoja
+    if (node == nullptr)
+        return nullptr;
+
+    //si el nodo actual tiene un valor mayor al buscado
+    if (num < node->value)
+        node = rbt_node_search_recursive(node->lc_node, num);
+
+    //si el nodo actual tiene un valor menor al buscado
+    if (num > node->value)
+        node = rbt_node_search_recursive(node->rc_node, num);
+
+    //si el nodo actual tiene el valor buscado
+    if (num == node->value)
+        return node;
+}
+
 void rbt::rbt_print_recursive(std::shared_ptr<rbt_node> node) const
 {
     if (node == nullptr)
@@ -183,33 +207,20 @@ int rbt::rbt_node_remove(std::shared_ptr<rbt_node> node_to_remove)
     return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
 }
 
-int rbt::rbt_search(std::shared_ptr<rbt_node> node,
-                    float num,
-                    std::shared_ptr<rbt_node> found_node)
+int rbt::rbt_search(float num,
+                    rbt_node *found_node)
 {
-    //si el arbol esta vacio
-    if (node == nullptr)
-    {
+    std::shared_ptr<rbt_node> my_node = rbt_node_search_recursive(root, num);
+
+    if (my_node == nullptr)
         return rbt_error_codes::RBT_NOT_FOUND;
-    }
 
-    //si el nodo actual tiene el valor buscado
-    if (num == node->value)
-    {
-        found_node = node;
-        return rbt_error_codes::RBT_SUCCESS;
-    }
+    found_node->lc_node = my_node->lc_node;
+    found_node->rc_node = my_node->rc_node;
+    found_node->value = my_node->value;
+    found_node->color = my_node->color;
 
-    //si el nodo actual tiene un valor mayor al buscado
-    if (num < root->value)
-    {
-        rbt_search(root->lc_node, num, found_node);
-    }
-
-    if (num > root->value)
-    {
-        rbt_search(root->rc_node, num, found_node);
-    }
+    return rbt_error_codes::RBT_SUCCESS;
 }
 
 int rbt::rbt_max_get(std::shared_ptr<rbt_node> max_node)

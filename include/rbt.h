@@ -57,7 +57,7 @@ public:
     /**
      * rbt_create
      * Toma una lista de números flotantes, y crea la estructura de datos deseada.
-     * 
+     *
      * @param [in]  in_number_list es la lista de números flotantes de entrada
      *
      * @returns error_code         un código de error indicando el éxito o error
@@ -97,14 +97,13 @@ public:
      *
      * @param [in]  node           es el nodo raíz original del árbol
      * @param [in]  num            es el número flotante por buscar
-     * @param [out] found_node     es el nodo encontrado que contiene el valor
+     * @param [out] found_node     es el puntero al nodo encontrado que contiene el valor
      *
      * @returns error_code         un código de error indicando el éxito o error
      *                             de la función
      */
-    int rbt_search(std::shared_ptr<rbt_node> node,
-                   float num,
-                   std::shared_ptr<rbt_node> found_node);
+    int rbt_search(float num,
+                   rbt_node *found_node);
 
     /**
      * rbt_max_get
