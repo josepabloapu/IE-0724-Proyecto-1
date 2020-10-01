@@ -57,48 +57,37 @@ public:
     /**
      * rbt_create
      * Toma una lista de números flotantes, y crea la estructura de datos deseada.
-     * Retorna el nodo raíz del árbol.
      *
      * @param [in]  in_number_list es la lista de números flotantes de entrada
-     * @param [out] new_root_node  es el nodo raíz del árbol creado
      *
      * @returns error_code         un código de error indicando el éxito o error
      *                             de la función
      */
-    int rbt_create(std::vector<float> in_number_list,
-                   std::shared_ptr<rbt_node> new_root_node);
+    int rbt_create(std::vector<float> in_number_list);
 
     /**
      * rbt_node_add
      * Toma un nodo y lo inserta en la estructura de datos.
      * Una nueva raíz puede ser obtenida.
      *
-     * @param [in]  in_root   es el nodo raíz original del árbol
      * @param [in]  new_node  es el nodo con el número flotante por insertar
-     * @param [out] new_root  es el nuevo nodo raíz del árbol
      *
      * @returns error_code    un código de error indicando el éxito o error
      *                        de la función
      */
-    int rbt_node_add(std::shared_ptr<rbt_node> in_root,
-                     std::shared_ptr<rbt_node> new_node,
-                     std::shared_ptr<rbt_node> new_root);
+    int rbt_node_add(std::shared_ptr<rbt_node> new_node);
 
     /**
      * rbt_node_remove
      * Toma un nodo arbitrario, lo busca y lo elimina de la estructura de datos.
      * Da error si el nodo no pertenece al árbol.
      *
-     * @param [in]  in_root        es el nodo raíz original del árbol
      * @param [in]  node_to_remove es el nodo por eliminar
-     * @param [out] new_root       es el nuevo nodo raíz del árbol
      *
      * @returns error_code         un código de error indicando el éxito o error
      *                             de la función
      */
-    int rbt_node_remove(std::shared_ptr<rbt_node> in_root,
-                        std::shared_ptr<rbt_node> node_to_remove,
-                        std::shared_ptr<rbt_node> new_root);
+    int rbt_node_remove(std::shared_ptr<rbt_node> node_to_remove);
 
     /**
      * rbt_search
@@ -106,53 +95,47 @@ public:
      * Si existieran varios nodos con el mismo valor, se devuelve cualquiera.
      * Da error si el valor no existe en ningún nodo.
      *
-     * @param [in]  in_root        es el nodo raíz original del árbol
+     * @param [in]  node           es el nodo raíz original del árbol
      * @param [in]  num            es el número flotante por buscar
-     * @param [out] found_node     es el nodo encontrado que contiene el valor
+     * @param [out] found_node     es el puntero al nodo encontrado que contiene el valor
      *
      * @returns error_code         un código de error indicando el éxito o error
      *                             de la función
      */
-    int rbt_search(std::shared_ptr<rbt_node> in_root,
-                   float num,
-                   std::shared_ptr<rbt_node> found_node);
+    int rbt_search(float num,
+                   rbt_node *found_node);
 
     /**
      * rbt_max_get
      * Se obtiene el nodo que contenga el valor máximo en todo el árbol.
      *
-     * @param [in]  in_root   es el nodo raíz original del árbol
      * @param [out] max_node  es el nodo encontrado que contiene el valor máximo
      *
      * @returns error_code    un código de error indicando el éxito o error
      *                        de la función
      */
-    int rbt_max_get(std::shared_ptr<rbt_node> in_root,
-                    std::shared_ptr<rbt_node> max_node);
+    int rbt_max_get(std::shared_ptr<rbt_node> max_node);
 
     /**
      * rbt_min_get
      * Se obtiene el nodo que contenga el valor mínimo en todo el árbol.
      *
-     * @param [in]  in_root   es el nodo raíz original del árbol
      * @param [out] min_node  es el nodo encontrado que contiene el valor mínimo
      *
      * @returns error_code    un código de error indicando el éxito o error
      *                        de la función
      */
-    int rbt_min_get(std::shared_ptr<rbt_node> in_root,
-                    std::shared_ptr<rbt_node> min_node);
+    int rbt_min_get(std::shared_ptr<rbt_node> min_node);
 
     /**
      * rbt_print
      * Se imprime el árbol en terminal.
      *
-     * @param [in]  in_root   es el nodo raíz original del árbol
      *
      * @returns error_code    un código de error indicando el éxito o error
      *                        de la función
      */
-    int rbt_print(std::shared_ptr<rbt_node> in_root);
+    int rbt_print();
 };
 
 #endif
