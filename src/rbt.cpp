@@ -225,14 +225,103 @@ int rbt::rbt_search(float num,
 
 int rbt::rbt_max_get(std::shared_ptr<rbt_node> max_node)
 {
-    //Add code
-    return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
+    std::shared_ptr<rbt_node> my_node = rbt_max_get_recursive(root);
+
+    if (my_node == nullptr)
+    {
+        return rbt_error_codes::RBT_NOT_FOUND;
+    }
+
+    else
+    {
+        max_node->value = my_node->value;
+        max_node->color = my_node->color;
+        max_node->rc_node = my_node->rc_node;
+        max_node->lc_node = my_node->lc_node;
+
+        return rbt_error_codes::RBT_SUCCESS;
+    }
+    
 }
+
+std::shared_ptr<rbt_node> rbt::rbt_max_get_recursive(std::shared_ptr<rbt_node> node)
+{
+    std::shared_ptr<rbt_node> maximum_node = nullptr;
+
+    //si el arbol esta vacio o llegó a una hoja
+    if (node == nullptr)
+        return maximum_node;
+
+    //el primer nodo que se registra como maximo
+    if (maximum_node->value == NULL)
+    {
+        maximum_node->value = node->value;
+        maximum_node->color = node->color;
+        maximum_node->rc_node = node->rc_node;
+        maximum_node->lc_node = node->lc_node;
+        node = rbt_max_get_recursive(node->rc_node);
+    }
+
+    //si el nodo consultado es mayor al maximo actual
+    if (maximum_node->value < node->value)
+    {
+        maximum_node->value = node->value;
+        maximum_node->color = node->color;
+        maximum_node->rc_node = node->rc_node;
+        maximum_node->lc_node = node->lc_node;
+        node = rbt_max_get_recursive(node->rc_node);
+    }
+}
+
+
 
 int rbt::rbt_min_get(std::shared_ptr<rbt_node> min_node)
 {
-    //Add code
-    return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
+    std::shared_ptr<rbt_node> my_node = rbt_min_get_recursive(root);
+
+    if (my_node == nullptr)
+    {
+        return rbt_error_codes::RBT_NOT_FOUND;
+    }
+
+    else
+    {
+        min_node->value = my_node->value;
+        min_node->color = my_node->color;
+        min_node->rc_node = my_node->rc_node;
+        min_node->lc_node = my_node->lc_node;
+
+        return rbt_error_codes::RBT_SUCCESS;
+    }
+}
+
+std::shared_ptr<rbt_node> rbt::rbt_min_get_recursive(std::shared_ptr<rbt_node> node)
+{
+    std::shared_ptr<rbt_node> minimum_node = nullptr;
+
+    //si el arbol esta vacio o llegó a una hoja
+    if (node == nullptr)
+        return minimum_node;
+
+    //el primer nodo que se registra como maximo
+    if (minimum_node->value == NULL)
+    {
+        minimum_node->value = node->value;
+        minimum_node->color = node->color;
+        minimum_node->rc_node = node->rc_node;
+        minimum_node->lc_node = node->lc_node;
+        node = rbt_min_get_recursive(node->lc_node);
+    }
+
+    //si el nodo consultado es mayor al minimo actual
+    if (minimum_node->value > node->value)
+    {
+        minimum_node->value = node->value;
+        minimum_node->color = node->color;
+        minimum_node->rc_node = node->rc_node;
+        minimum_node->lc_node = node->lc_node;
+        node = rbt_min_get_recursive(node->lc_node);
+    }
 }
 
 int rbt::rbt_print()
