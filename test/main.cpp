@@ -4,6 +4,7 @@
 
 #include "test_rbt.cpp"
 #include "test_rbt_node.cpp"
+#include "test_rbt_interface.cpp"
 #include "gtest/gtest.h"
 
 using namespace std;
