@@ -99,19 +99,35 @@ void rbt::flip_colors(std::shared_ptr<rbt_node> node)
 
 std::shared_ptr<rbt_node> rbt::move_red_left(std::shared_ptr<rbt_node> node)
 {
-    // Add code
+    flip_colors(node);
+    if (is_red(node->rc_node->rc_node))
+    {
+        node->rc_node = rotate_right(node->rc_node);
+        node = rotate_left(node);
+        flip_colors(node);
+    }
     return node;
 }
 
 std::shared_ptr<rbt_node> rbt::move_red_right(std::shared_ptr<rbt_node> node)
 {
-    // Add code
+    flip_colors(node);
+    if (is_red(node->lc_node->lc_node))
+    {
+        node = rotate_right(node);
+        flip_colors(node);
+    }
     return node;
 }
 
 std::shared_ptr<rbt_node> rbt::balance(std::shared_ptr<rbt_node> node)
 {
-    // Add code
+    if (is_red(node->rc_node))
+        node = rotate_left(node);
+    if (is_red(node->lc_node) && is_red(node->lc_node->lc_node))
+        node = rotate_right(node);
+    if (is_red(node->lc_node) && is_red(node->rc_node))
+        flip_colors(node);
     return node;
 }
 
