@@ -162,6 +162,22 @@ std::shared_ptr<rbt_node> rbt::rbt_node_search_recursive(std::shared_ptr<rbt_nod
         return node;
 }
 
+std::shared_ptr<rbt_node> rbt::rbt_max_get_recursive(std::shared_ptr<rbt_node> node)
+{
+    if (node->rc_node == nullptr)
+        return node;
+    else
+        return rbt_max_get_recursive(node->rc_node);
+}
+
+std::shared_ptr<rbt_node> rbt::rbt_min_get_recursive(std::shared_ptr<rbt_node> node)
+{
+    if (node->lc_node == nullptr)
+        return node;
+    else
+        return rbt_min_get_recursive(node->lc_node);
+}
+
 void rbt::rbt_print_recursive(std::shared_ptr<rbt_node> node) const
 {
     if (node == nullptr)
@@ -223,105 +239,30 @@ int rbt::rbt_search(float num,
     return rbt_error_codes::RBT_SUCCESS;
 }
 
-int rbt::rbt_max_get(std::shared_ptr<rbt_node> max_node)
+int rbt::rbt_max_get(rbt_node *max_node)
 {
+    if (root == nullptr)
+        return rbt_error_codes::RBT_EMPTY;
+
     std::shared_ptr<rbt_node> my_node = rbt_max_get_recursive(root);
-
-    if (my_node == nullptr)
-    {
-        return rbt_error_codes::RBT_NOT_FOUND;
-    }
-
-    else
-    {
-        max_node->value = my_node->value;
-        max_node->color = my_node->color;
-        max_node->rc_node = my_node->rc_node;
-        max_node->lc_node = my_node->lc_node;
-
-        return rbt_error_codes::RBT_SUCCESS;
-    }
-    
+    max_node->lc_node = my_node->lc_node;
+    max_node->rc_node = my_node->rc_node;
+    max_node->value = my_node->value;
+    max_node->color = my_node->color;
+    return rbt_error_codes::RBT_SUCCESS;
 }
 
-std::shared_ptr<rbt_node> rbt::rbt_max_get_recursive(std::shared_ptr<rbt_node> node)
+int rbt::rbt_min_get(rbt_node *min_node)
 {
-    std::shared_ptr<rbt_node> maximum_node = nullptr;
+    if (root == nullptr)
+        return rbt_error_codes::RBT_EMPTY;
 
-    //si el arbol esta vacio o llegó a una hoja
-    if (node == nullptr)
-        return maximum_node;
-
-    //el primer nodo que se registra como maximo
-    if (maximum_node->value == NULL)
-    {
-        maximum_node->value = node->value;
-        maximum_node->color = node->color;
-        maximum_node->rc_node = node->rc_node;
-        maximum_node->lc_node = node->lc_node;
-        node = rbt_max_get_recursive(node->rc_node);
-    }
-
-    //si el nodo consultado es mayor al maximo actual
-    if (maximum_node->value < node->value)
-    {
-        maximum_node->value = node->value;
-        maximum_node->color = node->color;
-        maximum_node->rc_node = node->rc_node;
-        maximum_node->lc_node = node->lc_node;
-        node = rbt_max_get_recursive(node->rc_node);
-    }
-}
-
-
-
-int rbt::rbt_min_get(std::shared_ptr<rbt_node> min_node)
-{
     std::shared_ptr<rbt_node> my_node = rbt_min_get_recursive(root);
-
-    if (my_node == nullptr)
-    {
-        return rbt_error_codes::RBT_NOT_FOUND;
-    }
-
-    else
-    {
-        min_node->value = my_node->value;
-        min_node->color = my_node->color;
-        min_node->rc_node = my_node->rc_node;
-        min_node->lc_node = my_node->lc_node;
-
-        return rbt_error_codes::RBT_SUCCESS;
-    }
-}
-
-std::shared_ptr<rbt_node> rbt::rbt_min_get_recursive(std::shared_ptr<rbt_node> node)
-{
-    std::shared_ptr<rbt_node> minimum_node = nullptr;
-
-    //si el arbol esta vacio o llegó a una hoja
-    if (node == nullptr)
-        return minimum_node;
-
-    //el primer nodo que se registra como maximo
-    if (minimum_node->value == NULL)
-    {
-        minimum_node->value = node->value;
-        minimum_node->color = node->color;
-        minimum_node->rc_node = node->rc_node;
-        minimum_node->lc_node = node->lc_node;
-        node = rbt_min_get_recursive(node->lc_node);
-    }
-
-    //si el nodo consultado es mayor al minimo actual
-    if (minimum_node->value > node->value)
-    {
-        minimum_node->value = node->value;
-        minimum_node->color = node->color;
-        minimum_node->rc_node = node->rc_node;
-        minimum_node->lc_node = node->lc_node;
-        node = rbt_min_get_recursive(node->lc_node);
-    }
+    min_node->lc_node = my_node->lc_node;
+    min_node->rc_node = my_node->rc_node;
+    min_node->value = my_node->value;
+    min_node->color = my_node->color;
+    return rbt_error_codes::RBT_SUCCESS;
 }
 
 int rbt::rbt_print()
