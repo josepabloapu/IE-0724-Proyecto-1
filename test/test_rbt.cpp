@@ -75,25 +75,3 @@ TEST(RedBlackTree, Positive_FlipColors_2)
     EXPECT_EQ(tree->root->lc_node->rc_node->value, 3);
     EXPECT_EQ(tree->root->lc_node->rc_node->color, rbt_color_codes::RBT_COLOR_BLACK);
 }
-
-TEST(RedBlackTree, Positive_Interface_rbt_max_get)
-{
-    std::vector<float> vector{5, 6, 1, 9, 3, 4, 6, 8, 7};
-    std::shared_ptr<rbt> tree(new rbt());
-    tree->rbt_create(vector);
-
-    rbt_node *my_max_node = new rbt_node();
-    tree->rbt_max_get(my_max_node);
-    EXPECT_EQ(my_max_node->value, 9);
-}
-
-TEST(RedBlackTree, Positive_Interface_rbt_min_get)
-{
-    std::vector<float> vector{5, 6, 1, 9, 3, 4, 6, 8, 7};
-    std::shared_ptr<rbt> tree(new rbt());
-    tree->rbt_create(vector);
-
-    rbt_node *my_min_node = new rbt_node();
-    tree->rbt_min_get(my_min_node);
-    EXPECT_EQ(my_min_node->value, 1);
-}
