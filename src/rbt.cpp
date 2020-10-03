@@ -143,30 +143,32 @@ std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> 
 }
 
 std::shared_ptr<rbt_node> rbt::rbt_node_search_recursive(std::shared_ptr<rbt_node> node,
-float num)
+                                                         float num)
 {
-//si el arbol esta vacio o llegó a una hoja
-if (node == nullptr)
-return nullptr;
+    // si el arbol esta vacio o llegó a una hoja
+    if (node == nullptr)
+        return nullptr;
 
-//si el nodo actual tiene un valor mayor al buscado
-if (num < node->value)
-node = rbt_node_search_recursive(node->lc_node, num);
+    // si el nodo actual tiene un valor mayor al buscado
+    if (num < node->value)
+        node = rbt_node_search_recursive(node->lc_node, num);
 
-if (node == nullptr)
-return nullptr;
+    // si llegó a una hoja y no lo encontró
+    if (node == nullptr)
+        return nullptr;
 
-//si el nodo actual tiene un valor menor al buscado
-if (num > node->value)
-node = rbt_node_search_recursive(node->rc_node, num);
+    // si el nodo actual tiene un valor menor al buscado
+    if (num > node->value)
+        node = rbt_node_search_recursive(node->rc_node, num);
 
-if (node == nullptr)
-return nullptr;
+    // si llegó a una hoja y no lo encontró
+    if (node == nullptr)
+        return nullptr;
 
-//si el nodo actual tiene el valor buscado
-if (num == node->value)
-return node;
-} 
+    // si el nodo actual tiene el valor buscado
+    if (num == node->value)
+        return node;
+}
 
 std::shared_ptr<rbt_node> rbt::rbt_max_get_recursive(std::shared_ptr<rbt_node> node)
 {
