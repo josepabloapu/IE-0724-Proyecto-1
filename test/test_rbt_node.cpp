@@ -1,14 +1,19 @@
 #include "rbt_node.h"
+#include "rbt.h"
 #include "gtest/gtest.h"
+
 
 TEST(RedBlackTreeNode, Positive_Constructor)
 {
     std::shared_ptr<rbt_node> node(new rbt_node(1, rbt_color_codes::RBT_COLOR_BLACK));
+    
     EXPECT_EQ(node->lc_node, nullptr);
     EXPECT_EQ(node->rc_node, nullptr);
     EXPECT_EQ(node->value, 1);
     EXPECT_EQ(node->color, rbt_color_codes::RBT_COLOR_BLACK);
 }
+
+
 
 TEST(RedBlackTreeNode, Positive_AddChildNode)
 {
