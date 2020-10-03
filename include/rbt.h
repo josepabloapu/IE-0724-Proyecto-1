@@ -31,8 +31,6 @@ private:
     std::shared_ptr<rbt_node> balance(std::shared_ptr<rbt_node> node);
     void remove_min();
     std::shared_ptr<rbt_node> remove_min_recursive(std::shared_ptr<rbt_node> node);
-    void remove_max();
-    std::shared_ptr<rbt_node> remove_max_recursive(std::shared_ptr<rbt_node> node);
     std::shared_ptr<rbt_node> rbt_node_add_recursive(std::shared_ptr<rbt_node> node,
                                                      std::shared_ptr<rbt_node> new_node);
     std::shared_ptr<rbt_node> rbt_node_remove_recursive(std::shared_ptr<rbt_node> node,

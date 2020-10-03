@@ -131,20 +131,24 @@ std::shared_ptr<rbt_node> rbt::balance(std::shared_ptr<rbt_node> node)
     return node;
 }
 
-void remove_min()
+void rbt::remove_min()
 {
+    if (!is_red(root->lc_node) && !is_red(root->rc_node))
+        root->color = rbt_color_codes::RBT_COLOR_RED;
+
+    root = remove_min_recursive(root);
+
+    if (!is_empty())
+        root->color = rbt_color_codes::RBT_COLOR_BLACK;
 }
 
 std::shared_ptr<rbt_node> rbt::remove_min_recursive(std::shared_ptr<rbt_node> node)
 {
-}
+    if (node->lc_node == nullptr)
+        return nullptr;
 
-void remove_max()
-{
-}
-
-std::shared_ptr<rbt_node> rbt::remove_max_recursive(std::shared_ptr<rbt_node> node)
-{
+    node->lc_node = remove_min_recursive(node->lc_node);
+    return balance(node);
 }
 
 std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> node,
