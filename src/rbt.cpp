@@ -187,9 +187,15 @@ std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_nod
     }
     else
     {
-        if (node_to_remove->value == node->value)
+        if (node_to_remove->value == node->value && node->rc_node == nullptr)
         {
             return nullptr;
+        }
+        if (node_to_remove->value == node->value)
+        {
+            std::shared_ptr<rbt_node> x = rbt_min_get_recursive(node->rc_node);
+            node->value = x->value;
+            node->rc_node = remove_min_recursive(node->rc_node);
         }
         else
         {
