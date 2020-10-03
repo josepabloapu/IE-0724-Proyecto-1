@@ -35,7 +35,7 @@ private:
     std::shared_ptr<rbt_node> rbt_node_add_recursive(std::shared_ptr<rbt_node> node,
                                                      std::shared_ptr<rbt_node> new_node);
     std::shared_ptr<rbt_node> rbt_node_remove_recursive(std::shared_ptr<rbt_node> node,
-                                                        std::shared_ptr<rbt_node> new_node);
+                                                        std::shared_ptr<rbt_node> node_to_remove);
     std::shared_ptr<rbt_node> rbt_node_search_recursive(std::shared_ptr<rbt_node> node,
                                                         float num);
     std::shared_ptr<rbt_node> rbt_max_get_recursive(std::shared_ptr<rbt_node> node);
@@ -87,7 +87,7 @@ public:
      * @returns error_code         un código de error indicando el éxito o error
      *                             de la función
      */
-    int rbt_node_remove(std::shared_ptr<rbt_node> node_to_remove);
+    int rbt_node_remove(rbt_node *node_to_remove);
 
     /**
      * rbt_search
