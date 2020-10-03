@@ -181,22 +181,28 @@ std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> 
 std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_node> node,
                                                          std::shared_ptr<rbt_node> node_to_remove)
 {
+    // Sigue adentrandose más al árbol por la izquierda
     if (node_to_remove->value < node->value)
     {
         node->lc_node = rbt_node_remove_recursive(node->lc_node, node_to_remove);
     }
     else
     {
+        // Borra una hoja
         if (node_to_remove->value == node->value && node->rc_node == nullptr)
         {
             return nullptr;
         }
+
+        // Borra un nodo con hijos (remplaza con el sucesor)
         if (node_to_remove->value == node->value)
         {
             std::shared_ptr<rbt_node> x = rbt_min_get_recursive(node->rc_node);
             node->value = x->value;
             node->rc_node = remove_min_recursive(node->rc_node);
         }
+
+        // Sigue adentrandose más al árbol por la derecha
         else
         {
             node->rc_node = rbt_node_remove_recursive(node->rc_node, node_to_remove);
