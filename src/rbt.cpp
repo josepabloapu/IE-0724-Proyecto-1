@@ -145,21 +145,45 @@ std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> 
 std::shared_ptr<rbt_node> rbt::rbt_node_search_recursive(std::shared_ptr<rbt_node> node,
                                                          float num)
 {
-    //si el arbol esta vacio o llegó a una hoja
+    // si el arbol esta vacio o llegó a una hoja
     if (node == nullptr)
         return nullptr;
 
-    //si el nodo actual tiene un valor mayor al buscado
+    // si el nodo actual tiene un valor mayor al buscado
     if (num < node->value)
         node = rbt_node_search_recursive(node->lc_node, num);
 
-    //si el nodo actual tiene un valor menor al buscado
+    // si llegó a una hoja y no lo encontró
+    if (node == nullptr)
+        return nullptr;
+
+    // si el nodo actual tiene un valor menor al buscado
     if (num > node->value)
         node = rbt_node_search_recursive(node->rc_node, num);
 
-    //si el nodo actual tiene el valor buscado
+    // si llegó a una hoja y no lo encontró
+    if (node == nullptr)
+        return nullptr;
+
+    // si el nodo actual tiene el valor buscado
     if (num == node->value)
         return node;
+}
+
+std::shared_ptr<rbt_node> rbt::rbt_max_get_recursive(std::shared_ptr<rbt_node> node)
+{
+    if (node->rc_node == nullptr)
+        return node;
+    else
+        return rbt_max_get_recursive(node->rc_node);
+}
+
+std::shared_ptr<rbt_node> rbt::rbt_min_get_recursive(std::shared_ptr<rbt_node> node)
+{
+    if (node->lc_node == nullptr)
+        return node;
+    else
+        return rbt_min_get_recursive(node->lc_node);
 }
 
 void rbt::rbt_print_recursive(std::shared_ptr<rbt_node> node) const
@@ -223,16 +247,30 @@ int rbt::rbt_search(float num,
     return rbt_error_codes::RBT_SUCCESS;
 }
 
-int rbt::rbt_max_get(std::shared_ptr<rbt_node> max_node)
+int rbt::rbt_max_get(rbt_node *max_node)
 {
-    //Add code
-    return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
+    if (root == nullptr)
+        return rbt_error_codes::RBT_EMPTY;
+
+    std::shared_ptr<rbt_node> my_node = rbt_max_get_recursive(root);
+    max_node->lc_node = my_node->lc_node;
+    max_node->rc_node = my_node->rc_node;
+    max_node->value = my_node->value;
+    max_node->color = my_node->color;
+    return rbt_error_codes::RBT_SUCCESS;
 }
 
-int rbt::rbt_min_get(std::shared_ptr<rbt_node> min_node)
+int rbt::rbt_min_get(rbt_node *min_node)
 {
-    //Add code
-    return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
+    if (root == nullptr)
+        return rbt_error_codes::RBT_EMPTY;
+
+    std::shared_ptr<rbt_node> my_node = rbt_min_get_recursive(root);
+    min_node->lc_node = my_node->lc_node;
+    min_node->rc_node = my_node->rc_node;
+    min_node->value = my_node->value;
+    min_node->color = my_node->color;
+    return rbt_error_codes::RBT_SUCCESS;
 }
 
 int rbt::rbt_print()

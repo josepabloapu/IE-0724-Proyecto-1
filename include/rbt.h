@@ -13,7 +13,8 @@ enum rbt_error_codes
     RBT_OUT_OF_RANGE = -2,
     RBT_TIMEOUT = -3,
     RBT_NOT_FOUND = -4,
-    RBT_FUNCT_NOT_IMPLEMENTED = -5,
+    RBT_EMPTY = -5,
+    RBT_FUNCT_NOT_IMPLEMENTED = -6,
 };
 
 class rbt
@@ -114,7 +115,7 @@ public:
      * @returns error_code    un código de error indicando el éxito o error
      *                        de la función
      */
-    int rbt_max_get(std::shared_ptr<rbt_node> max_node);
+    int rbt_max_get(rbt_node *max_node);
 
     /**
      * rbt_min_get
@@ -125,7 +126,7 @@ public:
      * @returns error_code    un código de error indicando el éxito o error
      *                        de la función
      */
-    int rbt_min_get(std::shared_ptr<rbt_node> min_node);
+    int rbt_min_get(rbt_node *min_node);
 
     /**
      * rbt_print
