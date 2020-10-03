@@ -23,7 +23,7 @@ private:
     bool is_empty() const;
     bool is_red(std::shared_ptr<rbt_node> node);
     bool contains(float value);
-    std::shared_ptr<rbt_node> rotate_left(std::shared_ptr<rbt_node> node);
+    std::shared_ptr<rbt_node> rotate_left(std::shared_ptr<rbt_node> node); //rbt_node *rotate_left(rbt_node *node)
     std::shared_ptr<rbt_node> rotate_right(std::shared_ptr<rbt_node> node);
     void flip_colors(std::shared_ptr<rbt_node> node);
     std::shared_ptr<rbt_node> move_red_left(std::shared_ptr<rbt_node> node);
