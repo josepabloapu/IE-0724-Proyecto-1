@@ -185,8 +185,7 @@ std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_nod
     {
         // Si el nodo a remover está a la izquierda del nodo en cuestión y
         // el hijo de la izquierda del nodo es negro y además su
-        // nieto es negro (tambien podría ser nulo). Lo que hago es
-        // introducir un nodo rojo el la rama izquierda.
+        // nieto izquierdo es negro (tambien podría ser nulo). Balanceo hacia la izquierda
         if (!is_red(node->lc_node) && !is_red(node->lc_node->lc_node))
             node = move_red_left(node);
 
@@ -205,6 +204,12 @@ std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_nod
         {
             return nullptr;
         }
+
+        // Si el nodo a remover está a la derecha del nodo en cuestión y
+        // el hijo de la derecha del nodo es negro y además su
+        // nieto izquierdo es negro (tambien podría ser nulo). Balanceo hacia la derecha
+        if (!is_red(node->rc_node) && !is_red(node->rc_node->lc_node))
+            node = move_red_right(node);
 
         // Borra un nodo con hijos (remplaza con el sucesor)
         if (node_to_remove->value == node->value)
