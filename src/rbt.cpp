@@ -363,6 +363,14 @@ int rbt::rbt_min_get(rbt_node *min_node)
 
 int rbt::rbt_print()
 {
-    rbt_print_recursive(root);
-    return rbt_error_codes::RBT_SUCCESS;
+    if (root == nullptr)
+    {
+        return rbt_error_codes::RBT_EMPTY;
+    }
+
+    else
+    {
+        rbt_print_recursive(root);
+        return rbt_error_codes::RBT_SUCCESS;  
+    }
 }
