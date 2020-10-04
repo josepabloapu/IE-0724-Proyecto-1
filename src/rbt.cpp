@@ -100,7 +100,7 @@ void rbt::flip_colors(std::shared_ptr<rbt_node> node)
 std::shared_ptr<rbt_node> rbt::move_red_left(std::shared_ptr<rbt_node> node)
 {
     flip_colors(node);
-    if (is_red(node->rc_node->rc_node))
+    if (is_red(node->rc_node->lc_node))
     {
         node->rc_node = rotate_right(node->rc_node);
         node = rotate_left(node);
@@ -181,9 +181,16 @@ std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> 
 std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_node> node,
                                                          std::shared_ptr<rbt_node> node_to_remove)
 {
-    // Sigue adentrandose más al árbol por la izquierda
     if (node_to_remove->value < node->value)
     {
+        // Si el nodo a remover está a la izquierda del nodo en cuestión y
+        // el hijo de la izquierda del nodo es negro y además su
+        // nieto es negro (tambien podría ser nulo). Lo que hago es
+        // introducir un nodo rojo el la rama izquierda.
+        if (!is_red(node->lc_node) && !is_red(node->lc_node->lc_node))
+            node = move_red_left(node);
+
+        // Sigue adentrandose más al árbol por la izquierda
         node->lc_node = rbt_node_remove_recursive(node->lc_node, node_to_remove);
     }
     else
@@ -212,7 +219,7 @@ std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_nod
             node->rc_node = rbt_node_remove_recursive(node->rc_node, node_to_remove);
         }
     }
-    return node;
+    return balance(node);
 }
 
 std::shared_ptr<rbt_node> rbt::rbt_node_search_recursive(std::shared_ptr<rbt_node> node,
@@ -375,6 +382,6 @@ int rbt::rbt_print()
     else
     {
         rbt_print_recursive(root);
-        return rbt_error_codes::RBT_SUCCESS;  
+        return rbt_error_codes::RBT_SUCCESS;
     }
 }
