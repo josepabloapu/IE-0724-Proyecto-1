@@ -188,6 +188,11 @@ std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_nod
     }
     else
     {
+        // Si el nodo a remover está a la derecha del nodo en cuestión y
+        // el nodo en cuentión tiene el hijo izquierdo rojo, rote a la derecha.
+        if (is_red(node->lc_node))
+            node = rotate_right(node);
+
         // Borra una hoja
         if (node_to_remove->value == node->value && node->rc_node == nullptr)
         {
@@ -201,10 +206,9 @@ std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_nod
             node->value = x->value;
             node->rc_node = remove_min_recursive(node->rc_node);
         }
-
-        // Sigue adentrandose más al árbol por la derecha
         else
         {
+            // Sigue adentrandose más al árbol por la derecha
             node->rc_node = rbt_node_remove_recursive(node->rc_node, node_to_remove);
         }
     }
