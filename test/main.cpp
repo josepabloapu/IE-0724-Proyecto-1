@@ -1,26 +1,13 @@
-#include "rbt.h"
-#include "rbt_node.h"
-#include "rbt_debug.h"
+#include <vector>
+#include <random>
+#include <chrono>
+
 #include "gtest/gtest.h"
+
+using namespace std;
 
 int main(int argc, char **argv)
 {
-    std::vector<float> in_number_list{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    std::shared_ptr<rbt> my_tree(new rbt());
-    my_tree->rbt_create(in_number_list);
-
-    rbt_node *node_to_remove = new rbt_node();
-    node_to_remove->value = 5;
-    my_tree->rbt_node_remove(node_to_remove);
-
-    my_tree->root->rc_node->rc_node->color = rbt_color_codes::RBT_COLOR_RED;
-
-    my_tree->rbt_print();
-
-    std::shared_ptr<rbt_debug> my_debug(new rbt_debug());
-    std::cout << "================================" << std::endl;
-    my_debug->test_black_nodes_count(my_tree);
-    std::cout << "--------------------------------" << std::endl;
-    my_debug->detect_consecutive_red_nodes(my_tree);
-    std::cout << "================================" << std::endl;
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
