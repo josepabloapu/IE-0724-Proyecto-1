@@ -123,7 +123,7 @@ TEST(RedBlackTree, Negative_Interface_rbt_min_get)
 
 TEST(RedBlackTree, Positive_rbt_search)
 {
-    std:std::vector<float> vector{7, 3, 5, 1, 2, 8, 9};
+    std::vector<float> vector{7, 3, 5, 1, 2, 8, 9};
     std::shared_ptr<rbt> tree(new rbt());
     tree->rbt_create(vector);
 
@@ -137,7 +137,7 @@ TEST(RedBlackTree, Positive_rbt_search)
 
 TEST(RedBlackTree, Negative_rbt_search)
 {
-    std:std::vector<float> vector{7, 3, 5, 1, 2, 8, 9};
+    std::vector<float> vector{7, 3, 5, 1, 2, 8, 9};
     std::shared_ptr<rbt> tree(new rbt());
     tree->rbt_create(vector);
 
@@ -230,7 +230,7 @@ TEST(RedBlackTree, Positive_rbt_node_add_case_3)
 
 TEST(RedBlackTree, Positive_print)
 {
-    std:std::vector<float> vector{7, 3, 5, 1, 2, 8, 9};
+    std::vector<float> vector{7, 3, 5, 1, 2, 8, 9};
     std::shared_ptr<rbt> tree(new rbt());
     tree->rbt_create(vector);
     int status = tree->rbt_print();
