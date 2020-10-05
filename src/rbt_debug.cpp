@@ -90,13 +90,18 @@ bool rbt_debug::test_black_nodes_count(std::shared_ptr<rbt> tree)
     return true;
 }
 
-void rbt_debug::detect_consecutive_red_nodes(std::shared_ptr<rbt> tree)
+bool rbt_debug::detect_consecutive_red_nodes(std::shared_ptr<rbt> tree)
 {
     std::shared_ptr<rbt_node> bad_node = detect_consecutive_red_nodes_recursive(tree->root);
-    if (bad_node != nullptr)
+    if (bad_node != nullptr){
         std::cout << "Error. Violation occured." << std::endl;
+		return false;
+	}
     else
+	{
         std::cout << "No consecutive red nodes found " << std::endl;
+		return true;
+	}
 }
 
 std::shared_ptr<rbt_node> rbt_debug::detect_consecutive_red_nodes_recursive(std::shared_ptr<rbt_node> node)
@@ -128,4 +133,47 @@ std::shared_ptr<rbt_node> rbt_debug::detect_consecutive_red_nodes_recursive(std:
         return node;
 
     return nullptr;
+}
+
+
+bool rbt_debug::detect_red_root(std::shared_ptr<rbt> tree)
+{	
+	if(tree->root == nullptr)
+	{
+		std::cout << "Root does not exist"<< std::endl;
+		return false;
+	}
+	if(tree->root->color == rbt_color_codes::RBT_COLOR_RED){
+		std::cout << "Alert at tree root: " << tree->root->value << " is red"<< std::endl;
+		return false;
+	}else{
+		std::cout << "This tree has a valid color in root"<< std::endl;
+		return true;
+	}
+}
+
+
+
+bool rbt_debug::test_red_black_tree(std::shared_ptr<rbt> tree){
+	bool black_nodes_count_equal = false, not_consecutive_red_nodes = false, have_red_root = false;
+	
+    std::cout << "================================" << std::endl;
+	black_nodes_count_equal = test_black_nodes_count(tree);
+    std::cout << "--------------------------------" << std::endl;
+	not_consecutive_red_nodes = detect_consecutive_red_nodes(tree);
+    std::cout << "--------------------------------" << std::endl;
+	have_red_root = detect_red_root(tree);
+    std::cout << "================================" << std::endl;
+
+	
+	if(black_nodes_count_equal == true && not_consecutive_red_nodes == true && have_red_root == true){
+		std::cout << "All test were positive"<< std::endl;
+		return true;
+	}else{
+		std::cout << "Something bad in this tree"<< std::endl;
+		return false;
+	}
+		
+	
+	
 }
