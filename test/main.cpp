@@ -13,14 +13,24 @@ int main(int argc, char **argv)
     node_to_remove->value = 5;
     my_tree->rbt_node_remove(node_to_remove);
 
-    my_tree->root->rc_node->rc_node->color = rbt_color_codes::RBT_COLOR_RED;
+    //my_tree->root->color = rbt_color_codes::RBT_COLOR_RED;
 
     my_tree->rbt_print();
+	
 
     std::shared_ptr<rbt_debug> my_debug(new rbt_debug());
+	
+	/*
     std::cout << "================================" << std::endl;
     my_debug->test_black_nodes_count(my_tree);
     std::cout << "--------------------------------" << std::endl;
     my_debug->detect_consecutive_red_nodes(my_tree);
+    std::cout << "--------------------------------" << std::endl;
+	my_debug->detect_red_root(my_tree);
     std::cout << "================================" << std::endl;
+	*/
+	
+	my_debug->test_red_black_tree(my_tree);
+	
+	
 }
