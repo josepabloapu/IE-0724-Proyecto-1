@@ -58,4 +58,4 @@ RUN cd /home/Documents/red_black_tree \
 	&& make \
 	&& cp run_unittest /usr/bin/ \
 
-ENV /usr/bin/run_unittest= RUN 	
+	
