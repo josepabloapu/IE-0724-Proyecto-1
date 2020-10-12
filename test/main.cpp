@@ -2,8 +2,11 @@
 #include <random>
 #include <chrono>
 
-#include "test_rbt.cpp"
-#include "test_rbt_node.cpp"
+/*
+#include "rbt.h"
+#include "rbt_node.h"
+#include "rbt_debug.h"
+*/
 #include "gtest/gtest.h"
 
 using namespace std;

@@ -99,20 +99,56 @@ void rbt::flip_colors(std::shared_ptr<rbt_node> node)
 
 std::shared_ptr<rbt_node> rbt::move_red_left(std::shared_ptr<rbt_node> node)
 {
-    // Add code
+    flip_colors(node);
+    if (is_red(node->rc_node->lc_node))
+    {
+        node->rc_node = rotate_right(node->rc_node);
+        node = rotate_left(node);
+        flip_colors(node);
+    }
     return node;
 }
 
 std::shared_ptr<rbt_node> rbt::move_red_right(std::shared_ptr<rbt_node> node)
 {
-    // Add code
+    flip_colors(node);
+    if (is_red(node->lc_node->lc_node))
+    {
+        node = rotate_right(node);
+        flip_colors(node);
+    }
     return node;
 }
 
 std::shared_ptr<rbt_node> rbt::balance(std::shared_ptr<rbt_node> node)
 {
-    // Add code
+    if (is_red(node->rc_node))
+        node = rotate_left(node);
+    if (is_red(node->lc_node) && is_red(node->lc_node->lc_node))
+        node = rotate_right(node);
+    if (is_red(node->lc_node) && is_red(node->rc_node))
+        flip_colors(node);
     return node;
+}
+
+void rbt::remove_min()
+{
+    if (!is_red(root->lc_node) && !is_red(root->rc_node))
+        root->color = rbt_color_codes::RBT_COLOR_RED;
+
+    root = remove_min_recursive(root);
+
+    if (!is_empty())
+        root->color = rbt_color_codes::RBT_COLOR_BLACK;
+}
+
+std::shared_ptr<rbt_node> rbt::remove_min_recursive(std::shared_ptr<rbt_node> node)
+{
+    if (node->lc_node == nullptr)
+        return nullptr;
+
+    node->lc_node = remove_min_recursive(node->lc_node);
+    return balance(node);
 }
 
 std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> node,
@@ -140,6 +176,55 @@ std::shared_ptr<rbt_node> rbt::rbt_node_add_recursive(std::shared_ptr<rbt_node> 
         flip_colors(node);
 
     return node;
+}
+
+std::shared_ptr<rbt_node> rbt::rbt_node_remove_recursive(std::shared_ptr<rbt_node> node,
+                                                         std::shared_ptr<rbt_node> node_to_remove)
+{
+    if (node_to_remove->value < node->value)
+    {
+        // Si el nodo a remover está a la izquierda del nodo en cuestión y
+        // el hijo de la izquierda del nodo es negro y además su
+        // nieto izquierdo es negro (tambien podría ser nulo). Balanceo hacia la izquierda
+        if (!is_red(node->lc_node) && !is_red(node->lc_node->lc_node))
+            node = move_red_left(node);
+
+        // Sigue adentrandose más al árbol por la izquierda
+        node->lc_node = rbt_node_remove_recursive(node->lc_node, node_to_remove);
+    }
+    else
+    {
+        // Si el nodo a remover está a la derecha del nodo en cuestión y
+        // el nodo en cuentión tiene el hijo izquierdo rojo, rote a la derecha.
+        if (is_red(node->lc_node))
+            node = rotate_right(node);
+
+        // Borra una hoja
+        if (node_to_remove->value == node->value && node->rc_node == nullptr)
+        {
+            return nullptr;
+        }
+
+        // Si el nodo a remover está a la derecha del nodo en cuestión y
+        // el hijo de la derecha del nodo es negro y además su
+        // nieto izquierdo es negro (tambien podría ser nulo). Balanceo hacia la derecha
+        if (!is_red(node->rc_node) && !is_red(node->rc_node->lc_node))
+            node = move_red_right(node);
+
+        // Borra un nodo con hijos (remplaza con el sucesor)
+        if (node_to_remove->value == node->value)
+        {
+            std::shared_ptr<rbt_node> x = rbt_min_get_recursive(node->rc_node);
+            node->value = x->value;
+            node->rc_node = remove_min_recursive(node->rc_node);
+        }
+        else
+        {
+            // Sigue adentrandose más al árbol por la derecha
+            node->rc_node = rbt_node_remove_recursive(node->rc_node, node_to_remove);
+        }
+    }
+    return balance(node);
 }
 
 std::shared_ptr<rbt_node> rbt::rbt_node_search_recursive(std::shared_ptr<rbt_node> node,
@@ -225,10 +310,29 @@ int rbt::rbt_node_add(std::shared_ptr<rbt_node> new_node)
     return rbt_error_codes::RBT_SUCCESS;
 }
 
-int rbt::rbt_node_remove(std::shared_ptr<rbt_node> node_to_remove)
+int rbt::rbt_node_remove(rbt_node *node_to_remove)
 {
-    // Add code
-    return rbt_error_codes::RBT_FUNCT_NOT_IMPLEMENTED;
+    if (std::isnan(node_to_remove->value))
+        return rbt_error_codes::RBT_INVALID_PARAM;
+
+    if (!contains(node_to_remove->value))
+        return rbt_error_codes::RBT_NOT_FOUND;
+
+    if (is_red(root->lc_node) && is_red(root->rc_node))
+        root->color = rbt_color_codes::RBT_COLOR_RED;
+
+    std::shared_ptr<rbt_node> node(new rbt_node());
+    node->lc_node = node_to_remove->lc_node;
+    node->rc_node = node_to_remove->rc_node;
+    node->value = node_to_remove->value;
+    node->color = node_to_remove->color;
+
+    root = rbt_node_remove_recursive(root, node);
+
+    if (!is_empty())
+        root->color = rbt_color_codes::RBT_COLOR_BLACK;
+
+    return rbt_error_codes::RBT_SUCCESS;
 }
 
 int rbt::rbt_search(float num,
@@ -275,6 +379,14 @@ int rbt::rbt_min_get(rbt_node *min_node)
 
 int rbt::rbt_print()
 {
-    rbt_print_recursive(root);
-    return rbt_error_codes::RBT_SUCCESS;
+    if (root == nullptr)
+    {
+        return rbt_error_codes::RBT_EMPTY;
+    }
+
+    else
+    {
+        rbt_print_recursive(root);
+        return rbt_error_codes::RBT_SUCCESS;
+    }
 }
