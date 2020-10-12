@@ -19,10 +19,10 @@ file(GLOB SOURCES_EXE "src/*.cpp" "test/*.cpp")
 add_compile_options("-W" "-Wall" "-pedantic")
 
 # Add executable
-add_executable(exe ${SOURCES_EXE})
+add_executable(run_unittest ${SOURCES_EXE})
 
 # Add GTest target link libraries to executable exe
-target_link_libraries(exe ${GTEST_LIBRARIES} pthread)
+target_link_libraries(run_unittest ${GTEST_LIBRARIES} pthread)
 
 ############# SOURCES FOR LIBRARY #############
 # Add sources for shared library
