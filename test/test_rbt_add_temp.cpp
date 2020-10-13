@@ -64,7 +64,7 @@ void test_timed_add_function()
     std::cout << sample_size << ", " << time << std::endl;
 }
 
-TEST(RedBlackTree, Time_AddFunction)
+TEST(RedBlackTree, Time_AddFunction_Size_VS_NanoSeconds)
 {
     for (int i = 0; i < 100; ++i)
     {
