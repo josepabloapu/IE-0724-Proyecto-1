@@ -251,8 +251,7 @@ std::shared_ptr<rbt_node> rbt::rbt_node_search_recursive(std::shared_ptr<rbt_nod
         return nullptr;
 
     // si el nodo actual tiene el valor buscado
-    if (num == node->value)
-        return node;
+    return node;
 }
 
 std::shared_ptr<rbt_node> rbt::rbt_max_get_recursive(std::shared_ptr<rbt_node> node)
